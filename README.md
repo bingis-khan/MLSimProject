@@ -1,7 +1,7 @@
 # MLSimProject
 FUGGGG :DDD
 
-# TODO:
+## TODO:
 1. Analizę czasownikowo – rzeczownikową;
   Plik 'ZbieranieWymagan.md'
 2. Karty CRC;
