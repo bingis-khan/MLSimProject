@@ -6,3 +6,7 @@ build
 
 # Ignore compiled classes
 bin
+
+# Ignore eclipse-specific files
+.project
+.settings
