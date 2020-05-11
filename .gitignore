@@ -10,3 +10,6 @@ bin
 # Ignore eclipse-specific files
 .project
 .settings
+
+# Temporarily ignore generated docs.
+d-zayn/docs
