@@ -38,6 +38,7 @@ dependencies {
 
 javadoc {
 	source = sourceSets.main.allJava
+	destinationDir = file("d-zayn/docs")
 	options.docletpath = configurations.umlDoclet.files.asType(List)
 	options.doclet = "nl.talsmasoftware.umldoclet.UMLDoclet"
 	options.addStringOption "umlImageFormat", "PNG"
