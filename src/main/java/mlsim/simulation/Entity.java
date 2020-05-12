@@ -1,4 +1,6 @@
-package mlsim;
+package mlsim.simulation;
+
+import mlsim.wrapper.Wrapper;
 
 abstract class Entity {
 	int getX() {

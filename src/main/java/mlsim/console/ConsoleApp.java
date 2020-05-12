@@ -1,4 +1,6 @@
-package mlsim;
+package mlsim.console;
+
+import mlsim.simulation.Simulation;
 
 public class ConsoleApp {
 	
@@ -7,10 +9,5 @@ public class ConsoleApp {
 	}
 	
     public void run() {
-    	
     }
-}
-
-class Query {
-	
 }

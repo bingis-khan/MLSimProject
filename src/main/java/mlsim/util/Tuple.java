@@ -1,14 +1,14 @@
-package mlsim;
+package mlsim.util;
 
 /**
  * Generic tuple class. (add doxx later)
  * 
  * @author bingis_khan
  *
- * @param <T>
- * @param <S>
+ * @param <T> Type of the first object.
+ * @param <S> Type of the second object.
  */
-class Tuple<T, S> {
+public class Tuple<T, S> {
 	private final T first;
 	private final S second;
 	
