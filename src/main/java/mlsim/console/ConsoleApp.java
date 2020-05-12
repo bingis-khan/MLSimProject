@@ -7,7 +7,7 @@ public class ConsoleApp {
 		new ConsoleApp().run();
 	}
 	
-    public void run() {
-    	
-    }
+	public void run() {
+		
+	}
 }
