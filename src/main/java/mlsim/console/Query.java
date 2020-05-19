@@ -1,9 +1,10 @@
 package mlsim.console;
 
 class Query {
-
-	public Query() {
-		// TODO Auto-generated constructor stub
+	private final String userString;
+	
+	Query(String userString) {
+		this.userString = userString;
 	}
 
 }
