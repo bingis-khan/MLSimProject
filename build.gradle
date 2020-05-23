@@ -29,11 +29,18 @@ dependencies {
     implementation 'com.google.guava:guava:28.2-jre'
 
     // Use JUnit test framework
-    testImplementation 'junit:junit:4.12'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.2'
+    
+    // JUnit test engine
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.6.2'
     
     // Most up-to-date compatible umlDoclet version
     // Used for generating UML Diagrams
     umlDoclet "nl.talsmasoftware:umldoclet:2.0.8"
+}
+
+test {
+	useJUnitPlatform()
 }
 
 javadoc {
