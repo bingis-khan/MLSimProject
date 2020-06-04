@@ -31,7 +31,7 @@ public abstract class Entity {
 	 * 
 	 * @return Entity's x coordinate.
 	 */
-	int getX() {
+	public int getX() {
 		return x;
 	}
 	
@@ -40,7 +40,7 @@ public abstract class Entity {
 	 * 
 	 * @return Entity's y coordinate.
 	 */
-	int getY() {
+	public int getY() {
 		return y;
 	}
 }
