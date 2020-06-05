@@ -17,11 +17,11 @@ public class Tuple<T, S> {
 		this.second = second;
 	}
 	
-	T first() {
+	public T first() {
 		return first;
 	}
 	
-	S second() {
+	public S second() {
 		return second;
 	}
 }

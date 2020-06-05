@@ -2,6 +2,7 @@ package mlsim.console;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /*
  * COMMAND EXAMPLES:
@@ -107,6 +108,10 @@ class Commands {
 		while (!query.isAtEnd()) {
 			context.print(query.next() + "\n");
 		}
+	}
+	
+	private void run(Query query, ConsoleApp context) {
+		
 	}
 	
 	private void exit(Query query, ConsoleApp context) {

@@ -8,7 +8,7 @@ public class GAWrapper extends Wrapper<GAWrapper> {
 	
 	@Override
 	Move evaluate(SimulationState s) {
-		
+		return null;
 	}
 	
 	/**
