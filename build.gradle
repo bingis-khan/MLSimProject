@@ -11,7 +11,7 @@ plugins {
 }
 
 application {
-	mainClassName = "mlsim.ConsoleApp"
+	mainClassName = "mlsim.console.ConsoleApp"
 }
 
 repositories {
@@ -37,6 +37,10 @@ dependencies {
     // Most up-to-date compatible umlDoclet version
     // Used for generating UML Diagrams
     umlDoclet "nl.talsmasoftware:umldoclet:2.0.8"
+}
+
+run {
+	standardInput = System.in
 }
 
 test {
