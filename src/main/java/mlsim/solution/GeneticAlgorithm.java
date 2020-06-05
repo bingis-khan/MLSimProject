@@ -27,31 +27,34 @@ class GeneticAlgorithm implements Crossover<GeneticAlgorithm>, Mutable<GeneticAl
 	 * @param ruleNum Number of this GA's rules.
 	 * 
 	 */
-	GeneticAlgorithm(int ruleSize, int ruleNum, final boolean[] binaryArray) {
+	GeneticAlgorithm(int ruleSize, int ruleNum, final boolean[] binaryArray, int pcSize) {
 		assert binaryArray.length == ruleNum * ruleSize : "Array size must"
 				+ "be equal to ruleNum * ruleSize.";
 		
 		rules = new ArrayList<Rule>();
 		for (int i = 0; i < ruleNum; i++) {
-			rules.add(new Rule(Arrays.copyOfRange(binaryArray, i * ruleSize, (i+1) * ruleSize)));
+			rules.add(new Rule(Arrays.copyOfRange(binaryArray, i * ruleSize, (i+1) * ruleSize), pcSize));
 		}
 		
 		assert ruleNum == rules.size() : "Number of created rules is not equal to the expected number";
 	}
 	
 	/**
-	 * 
+	 * Given a
 	 * 
 	 * @param flags
 	 * @return
 	 */
 	int evaluate(final boolean[] flags) {
+		
+		
 		for (Rule rule : rules) {
 			if (rule.matches(flags)) {
 				return rule.postCondition();
 			}
 		}
-		return 0;
+		// Sentinel value '-1' to symbolize that none matched.
+		return -1;
 	}
 
 	@Override
@@ -71,7 +74,7 @@ class GeneticAlgorithm implements Crossover<GeneticAlgorithm>, Mutable<GeneticAl
 /**
  * Rule rezprezentuje jeden warunek w GA. 
  * 
- * @author Wszyscy :D 2012 wielki mix jutube, yolo
+ * @author Wszyscy :D 2012 wielki mix jutube, jeja
  *
  */
 class Rule {
@@ -85,7 +88,15 @@ class Rule {
 		postCondition = fromBinaryArrayToInt(arr, postConditionSize);
 	}
 	
-	
+	/**
+	 * Basic conversion from boolean array to integer.
+	 * Converts the last part of the array, whose size is
+	 * denoted by pcSize.
+	 * 
+	 * @param arr Array whose part to convert to an integer.
+	 * @param pcSize Post condition size ie. number of bytes assigned to post condition.
+	 * @return Post condition as an integer.
+	 */
 	private static int fromBinaryArrayToInt(final boolean[] arr, int pcSize) {
 		int num = 0;
 		for (int i = arr.length - 1; i < (arr.length - 1 - pcSize); i--) {
@@ -101,16 +112,30 @@ class Rule {
 	}
 	
 	/**
+	 * Checks if the given flags fulfill the condition in this rule.
 	 * 
-	 * 
-	 * @param arr
-	 * @return
+	 * @param flags Flags to compare against this rule's precondition.
+	 * @return True if flags fulfill this condition.
 	 */
-	boolean matches(final boolean[] arr) {
-		
+	boolean matches(final boolean[] flags) {
+		return false;
 	}
 	
+	/**
+	 * Returns the post condition of this rule.
+	 * 
+	 * @return Post condition as an integer.
+	 */
 	int postCondition() {
 		return postCondition;
+	}
+	
+	/**
+	 * Returns the size of this rule.
+	 * 
+	 * @return Size of this rule.
+	 */
+	int size() {
+		return preCondition.length + postCondition;
 	}
 }
