@@ -17,26 +17,27 @@ import mlsim.util.Tuple;
  * @author Wszyscy :)
  *
  */
-class GeneticAlgorithm implements Crossover<GeneticAlgorithm>, Mutable<GeneticAlgorithm> {
+public class GeneticAlgorithm implements Crossover<GeneticAlgorithm>, Mutable<GeneticAlgorithm> {
 	private final List<Rule> rules;
 	
 	/**
-	 * 
+	 * Creates a new genetic algorithm.
 	 * 
 	 * @param ruleSize Size of a single rule. 
+	 * @param preSize Size of a rule's precondition.
 	 * 
 	 */
-	GeneticAlgorithm(final boolean[] binaryArray, int ruleSize, int pcSize) {
-		assert binaryArray.length % ruleSize == 0 : "binaryArray must be equal to a multiple"
+	public GeneticAlgorithm(final boolean[] binaryArray, int ruleSize, int preSize) {
+		assert binaryArray.length % ruleSize == 0 : "Length of binaryArray must be equal to a multiple"
 				+ "of ruleSize.";
-		assert pcSize < ruleSize : "Pre condition size (pcSize) must be smaller than single ruleSize.";
+		assert preSize < ruleSize : "Pre condition size (pcSize) must be smaller than single ruleSize.";
 		
 	
 		int ruleNum = binaryArray.length / ruleSize; // Number of single rules in this algorithm.
 		rules = new ArrayList<Rule>();
 		for (int i = 0; i < ruleNum; i++) {
 			// Divides the array into equal chunks that symbolize single rules.
-			rules.add(new Rule(Arrays.copyOfRange(binaryArray, i * ruleSize, (i+1) * ruleSize), pcSize));
+			rules.add(new Rule(Arrays.copyOfRange(binaryArray, i * ruleSize, (i+1) * ruleSize), preSize));
 		}
 		
 		assert ruleNum == rules.size() : "Number of created rules is not equal to the expected number";
@@ -51,7 +52,6 @@ class GeneticAlgorithm implements Crossover<GeneticAlgorithm>, Mutable<GeneticAl
 	 * @return A postcondition value or -1 if none matched..
 	 */
 	int evaluate(final boolean[] flags) {
-		
 		
 		for (Rule rule : rules) {
 			if (rule.matches(flags)) {
@@ -94,27 +94,25 @@ class GeneticAlgorithm implements Crossover<GeneticAlgorithm>, Mutable<GeneticAl
  */
 class Rule {
 	private final boolean[] preCondition;
-	private final int postCondition;
+	private final boolean[] postCondition;
 	
-	Rule(final boolean[] arr, int postConditionSize) {
-		int preConditionSize = arr.length - postConditionSize;
+	Rule(final boolean[] arr, int preSize) {
 		
-		preCondition = Arrays.copyOf(arr, preConditionSize);
-		postCondition = fromBinaryArrayToInt(arr, postConditionSize);
+		preCondition = Arrays.copyOf(arr, preSize);
+		postCondition = Arrays.copyOfRange(arr, preSize, arr.length);
+		
+		assert preCondition.length + postCondition.length == arr.length : "Size of precondition + postcondition should be the same as arr.";
 	}
 	
 	/**
 	 * Basic conversion from boolean array to integer.
-	 * Converts the last part of the array, whose size is
-	 * denoted by pcSize.
 	 * 
 	 * @param arr Array whose part to convert to an integer.
-	 * @param pcSize Post condition size ie. number of bytes assigned to post condition.
-	 * @return Post condition as an integer.
+	 * @return An integer which was represented by arr.
 	 */
-	private static int fromBinaryArrayToInt(final boolean[] arr, int pcSize) {
+	private static int binaryArrayToInt(final boolean[] arr) {
 		int num = 0;
-		for (int i = arr.length - 1; i < (arr.length - 1 - pcSize); i--) {
+		for (int i = 0; i < arr.length; i++) {
 			num <<= 1;
 			
 			if (arr[i]) {
@@ -177,7 +175,7 @@ class Rule {
 	 * @return Post condition as an integer.
 	 */
 	int postCondition() {
-		return postCondition;
+		return binaryArrayToInt(postCondition);
 	}
 	
 	/**
@@ -186,6 +184,6 @@ class Rule {
 	 * @return Size of this rule.
 	 */
 	int size() {
-		return preCondition.length + postCondition;
+		return preCondition.length + postCondition.length;
 	}
 }

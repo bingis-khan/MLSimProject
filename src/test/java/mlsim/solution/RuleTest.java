@@ -16,7 +16,7 @@ public class RuleTest {
 	private Rule rule;
 	
 	@Nested
-	@DisplayName("when given a simple binary array")
+	@DisplayName("when given '101010' with precondition = 3")
 	class WhenGivenASimpleBinaryArray {
 		
 		@BeforeEach
@@ -25,7 +25,7 @@ public class RuleTest {
 		}
 		
 		@Test
-		@DisplayName("precondition in binary should be equal to its integer counterpart.")
+		@DisplayName("precondition in binary (b010) should be equal to its integer counterpart (2).")
 		public void preconditionInBinaryShouldBeEqualToConvertedInteger() {
 			int post = rule.postCondition();
 			
@@ -33,7 +33,7 @@ public class RuleTest {
 		}
 		
 		@Test
-		@DisplayName("calling matches() should return true with matching flags.")
+		@DisplayName("calling matches() should return true with '100'.")
 		public void callingMatchesShouldReturnTrueWithMatchingCondition() {
 			boolean[] fulfillsCondition = sToBa("100");
 			
@@ -41,7 +41,7 @@ public class RuleTest {
 		}
 		
 		@Test
-		@DisplayName("calling matches() should return false with non matching flags.")
+		@DisplayName("calling matches() should return false with '010'.")
 		public void callingMatchesShouldReturnFalseWithNonMatchingFlags() {
 			boolean[] unfulfilled = sToBa("010");
 			
@@ -49,7 +49,7 @@ public class RuleTest {
 		}
 		
 		@Test
-		@DisplayName("calling size() should return the actual size of this rule.")
+		@DisplayName("calling size() should return 6.")
 		public void callingSizeShouldReturnActualSizeOfThisRule() {
 			int size = rule.size();
 			
