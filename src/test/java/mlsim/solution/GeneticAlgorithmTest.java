@@ -30,6 +30,18 @@ public class GeneticAlgorithmTest {
 			assertEquals(2, ga.size());
 		}
 		
+		@Test
+		@DisplayName("calling preSize() should return 2.")
+		public void callingPreSize_shouldReturn1() {
+			assertEquals(2, ga.preSize());
+		}
+		
+		@Test
+		@DisplayName("calling postSize() should return 1.")
+		public void callingPostSize_shouldReturn2() {
+			assertEquals(1, ga.postSize());
+		}
+		
 		@Nested
 		@DisplayName("calling mutate()")
 		class CallingMutate {

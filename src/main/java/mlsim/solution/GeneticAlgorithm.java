@@ -19,6 +19,7 @@ import mlsim.util.Tuple;
  */
 public class GeneticAlgorithm implements Crossover<GeneticAlgorithm>, Mutable<GeneticAlgorithm> {
 	private final List<Rule> rules;
+	private final int pre, post;
 	
 	/**
 	 * Creates a new genetic algorithm.
@@ -31,7 +32,12 @@ public class GeneticAlgorithm implements Crossover<GeneticAlgorithm>, Mutable<Ge
 		assert binaryArray.length % ruleSize == 0 : "Length of binaryArray must be equal to a multiple"
 				+ "of ruleSize.";
 		assert preSize < ruleSize : "Pre condition size (pcSize) must be smaller than single ruleSize.";
+		assert ruleSize >= 2 : "Rule size must be greater than 2 (minimum for postSize and preSize equal to 1).";
+		assert preSize >= 1: "Precondition size must be greater or equal to 1."; 
 		
+		// Sizes of precondition and postcondition respectively.
+		pre = preSize;
+		post = ruleSize - preSize;
 	
 		int ruleNum = binaryArray.length / ruleSize; // Number of single rules in this algorithm.
 		rules = new ArrayList<Rule>();
@@ -82,6 +88,34 @@ public class GeneticAlgorithm implements Crossover<GeneticAlgorithm>, Mutable<Ge
 	 */
 	public int size() {
 		return rules.size();
+	}
+	
+	/**
+	 * Returns the size of precondition in bits.
+	 * Example: 10011
+	 * Pre:100
+	 * Post:11
+	 * preSize() == 3
+	 * postSize() == 2
+	 * 
+	 * @return Size in bits of precondition.
+	 */
+	public int preSize() {
+		return pre;
+	}
+	
+	/**
+	 * Returns the size of postcondition in bits.
+	 * Example: 10011
+	 * Pre:100
+	 * Post:11
+	 * preSize() == 3
+	 * postSize() == 2
+	 * 
+	 * @return Size in bits of postcondition.
+	 */
+	public int postSize() {
+		return post;
 	}
 }
 
