@@ -57,7 +57,7 @@ public class GeneticAlgorithm implements Crossover<GeneticAlgorithm>, Mutable<Ge
 	 * @param flags Flags to compare against each rule's precondition.
 	 * @return A postcondition value or -1 if none matched..
 	 */
-	int evaluate(final boolean[] flags) {
+	public int evaluate(final boolean[] flags) {
 		
 		for (Rule rule : rules) {
 			if (rule.matches(flags)) {
