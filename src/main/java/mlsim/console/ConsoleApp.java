@@ -1,6 +1,8 @@
 package mlsim.console;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -26,9 +28,13 @@ public class ConsoleApp {
 	private SimulationFactory simFactory;
 	private Selector selector;
 	private Results<GAWrapper> lastResults;
+	private List<GAWrapper> currentPopulation;
 	
 	// Interactive simulation.
 	private Simulation activeSimulation;
+	
+	// Macros
+	private final Map<String, List<String>> macros = new HashMap<>();
 	
 	public static void main(String[] args) {
 		CommandParser parser = new CommandParser(Commands.initialize());
@@ -43,12 +49,16 @@ public class ConsoleApp {
 	 *  Method used to start the program which contains its main loop.
 	 */
 	void run() {
+		// Temporary macro definitions.
+		parse("def adptest adp 1 # set p 30 7 5 # step");
+		parse("def basic set p 100 100 2.5 # i p 1 4 60");
+		parse("def sf step # full");
 		
 		while (!exit) {
 			print(">");
 			
 			String input = readIn();
-			parser.parse(input, this);
+			parse(input);
 		}
 		
 		scanner.close();
@@ -63,6 +73,15 @@ public class ConsoleApp {
 		return scanner.nextLine();
 	}
 	
+	/**
+	 * Parses the input and executes it.
+	 * 
+	 * @param input Input string.
+	 */
+	private void parse(String input) {
+		parser.parse(input, this);
+	}
+	
 	/* Delegate interface */
 	
 	/**
@@ -74,7 +93,7 @@ public class ConsoleApp {
 	 * @return New simulation.
 	 */
 	public Simulation newSimulation() {
-		return null;
+		return simFactory.newSimulation(currentPopulation);
 	}
 	
 	/**
@@ -140,7 +159,7 @@ public class ConsoleApp {
 	 * @param population New current population.
 	 */
 	public void setPopulation(List<GAWrapper> population) {
-		
+		currentPopulation = population;
 	}
 	
 	/**
@@ -148,7 +167,7 @@ public class ConsoleApp {
 	 * 
 	 */
 	public boolean isPopulationInitialized() {
-		return false;
+		return currentPopulation != null;
 	}
 	
 	/**
@@ -240,5 +259,39 @@ public class ConsoleApp {
 	 */
 	public void untrackAll() {
 		
+	}
+	
+	/* Macros */
+	
+	/**
+	 * Saves this macro command as macroName.
+	 * 
+	 * @param macroName Name of this macro.
+	 * @param macroCommands Commands that compose this macro.
+	 */
+	public void addMacro(String macroName, List<String> macroCommands) {
+		macros.put(macroName, macroCommands);
+	}
+	
+	/**
+	 * Runs a macro with the given name.
+	 * Returns false if the macro with the
+	 * given name does not exist.
+	 * 
+	 * @param macroName Name of the macro.
+	 * @return True if macro was run, false if a macro with this name does not exist.
+	 */
+	public boolean runMacro(String macroName) {
+		List<String> macro = macros.get(macroName);
+		
+		if (macro == null) {
+			return false;
+		}
+		
+		for (String command : macro) {
+			parse(command);
+		}
+		
+		return true;
 	}
 }

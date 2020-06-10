@@ -18,11 +18,11 @@ public class SimulationState {
 		this.food = food;
 	}
 	
-	List<? extends Entity> agents() {
+	public List<? extends Entity> agents() {
 		return agents;
 	}
 	
-	List<? extends Entity> food() {
+	public List<? extends Entity> food() {
 		return food;
 	}
 }
