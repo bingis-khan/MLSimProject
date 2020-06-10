@@ -39,8 +39,8 @@ public class Simulation {
 	// A set for agents marked for removal.
 	private final Set<Entity> marked = new HashSet<>();
 	
-	// A Map for tracking the scores of agents' genotypes.
-	private final Map<GAWrapper, Integer> scores = new HashMap<>();
+	// Results for tracking the scores of agents' genotypes.
+	private final Results<GAWrapper> results = new Results<>();
 	
 	/* CONSTANTS */
 	// Protected, so it can be used by it's subclasses.
@@ -257,7 +257,7 @@ public class Simulation {
 	 *  of this simulation's results.
 	 */
 	private void addScore(Agent<GAWrapper> agent) {
-		scores.put(agent.getAlgorithm(), steps);
+		results.appendGenotype(agent.getAlgorithm(), steps);
 	}
 	
 	
@@ -339,7 +339,7 @@ public class Simulation {
 	 * 
 	 * @return Results of this simulation.
 	 */
-	public Map<GAWrapper, Integer> finish() {
+	public Results<GAWrapper> finish() {
 		while (!ended()) {
 			step();
 		}
@@ -366,9 +366,9 @@ public class Simulation {
 	 * 
 	 * @return Results of this simulation.
 	 */
-	public Map<GAWrapper, Integer> getResults() {
+	public Results<GAWrapper> getResults() {
 		assert ended() : "Program attempted to retrieve results of the simulation before it has ended.";
-		return scores;
+		return results;
 	}
 	
 	

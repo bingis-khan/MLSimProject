@@ -63,9 +63,9 @@ public abstract class Wrapper<T extends Wrapper<T>> implements Mutable<T>, Cross
 		Entity closest = null;
 		
 		for (Entity entity : entities) {
-			if (!entity.equals(main) && distanceOf(entity, closest) < distance) {
+			if (!entity.equals(main) && distanceOf(main, entity) < distance) {
 				closest = entity;
-				distance = distanceOf(entity, closest);
+				distance = distanceOf(main, entity);
 			}
 		}
 		
