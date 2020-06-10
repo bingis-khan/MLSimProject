@@ -10,9 +10,9 @@ import mlsim.wrapper.Wrapper;
  *
  */
 public abstract class Entity {
-	private int x, y;
+	protected int x, y;
 	
-	Entity(int x, int y) {
+	protected Entity(int x, int y) {
 		this.x = x;
 		this.y = y;
 	}
@@ -84,7 +84,16 @@ class Agent<T extends Wrapper<T>> extends Entity {
 	 * 
 	 * @param s State of the simulation in which the agent exists.
 	 */
-	void move(SimulationState s) {}
+	void move(SimulationState s) {
+		Move move = genotype.evaluate(this, s);
+		
+		switch (move) {
+			case NORTH: y--; break;
+			case SOUTH: y++; break;
+			case WEST:  x--; break;
+			case EAST:  x++; break;
+		}
+	}
 	
 	/**
 	 * Feeds this amount of food to this agent.

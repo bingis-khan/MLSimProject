@@ -1,8 +1,12 @@
 package mlsim.console;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
+import java.util.Set;
 
+import mlsim.simulation.Entity;
 import mlsim.simulation.Results;
 import mlsim.simulation.Simulation;
 import mlsim.simulation.SimulationFactory;
@@ -22,11 +26,15 @@ public class ConsoleApp {
 	private final CommandParser parser;
 	
 	private SimulationFactory simFactory;
-	//private Population population;
+	private Selector selector;
 	private Results<GAWrapper> lastResults;
+	private List<GAWrapper> currentPopulation;
 	
 	// Interactive simulation.
 	private Simulation activeSimulation;
+	
+	// Macros
+	private final Map<String, List<String>> macros = new HashMap<>();
 	
 	public static void main(String[] args) {
 		CommandParser parser = new CommandParser(Commands.initialize());
@@ -38,15 +46,19 @@ public class ConsoleApp {
 	}
 	
 	/**
-	 *  Method used to start the program which contains its main loop
+	 *  Method used to start the program which contains its main loop.
 	 */
 	void run() {
+		// Temporary macro definitions.
+		parse("def adptest adp 1 # set p 30 7 5 # step");
+		parse("def basic set p 100 100 2.5 # i p 1 4 60");
+		parse("def sf step # full");
 		
 		while (!exit) {
 			print(">");
 			
 			String input = readIn();
-			parser.parse(input, this);
+			parse(input);
 		}
 		
 		scanner.close();
@@ -61,6 +73,15 @@ public class ConsoleApp {
 		return scanner.nextLine();
 	}
 	
+	/**
+	 * Parses the input and executes it.
+	 * 
+	 * @param input Input string.
+	 */
+	private void parse(String input) {
+		parser.parse(input, this);
+	}
+	
 	/* Delegate interface */
 	
 	/**
@@ -72,7 +93,7 @@ public class ConsoleApp {
 	 * @return New simulation.
 	 */
 	public Simulation newSimulation() {
-		return null;
+		return simFactory.newSimulation(currentPopulation);
 	}
 	
 	/**
@@ -94,6 +115,24 @@ public class ConsoleApp {
 	 */
 	public Results<GAWrapper> getResults() {
 		return lastResults;
+	}
+	
+	/**
+	 * Returns the current selector.
+	 *  
+	 * @return This ConsoleApp's Selector.
+	 */
+	public Selector getSelector() {
+		return selector;
+	}
+	
+	/**
+	 *  Sets this ConsoleApp's current selector.
+	 *  
+	 *  @param newSelector New Selector to replace the current one.
+	 */
+	public void setSelector(Selector newSelector) {
+		selector = newSelector;
 	}
 	
 	/**
@@ -120,7 +159,7 @@ public class ConsoleApp {
 	 * @param population New current population.
 	 */
 	public void setPopulation(List<GAWrapper> population) {
-		
+		currentPopulation = population;
 	}
 	
 	/**
@@ -128,7 +167,7 @@ public class ConsoleApp {
 	 * 
 	 */
 	public boolean isPopulationInitialized() {
-		return false;
+		return currentPopulation != null;
 	}
 	
 	/**
@@ -183,7 +222,7 @@ public class ConsoleApp {
 		activeSimulation = null;
 	}
 	
-	/* Tracking organisms */
+	/* TODO Tracking organisms */
 	
 	/**
 	 *  Add a solution to be tracked.
@@ -191,8 +230,19 @@ public class ConsoleApp {
 	 *  @param sol Solution to be tracked (must exist in a list).
 	 *  
 	 */
-	public void track(Object sol) {
+	public void track(Entity sol) {
 		
+	}
+	
+	/**
+	 * Returns the Set of tracked entities. Modifying the contents
+	 * is, as always, undefined behavior. Probably returns the copy of the set.
+	 * Probably... 
+	 * 
+	 * @return A (copy of?) Set with tracked entities.
+	 */
+	public Set<Entity> trackedEntities() {
+		return null;
 	}
 	
 	/**
@@ -200,7 +250,7 @@ public class ConsoleApp {
 	 * 
 	 * @param sol Solution to be untracked.
 	 */
-	public void untrack(Object sol) {
+	public void untrack(Entity sol) {
 		
 	}
 	
@@ -209,5 +259,39 @@ public class ConsoleApp {
 	 */
 	public void untrackAll() {
 		
+	}
+	
+	/* Macros */
+	
+	/**
+	 * Saves this macro command as macroName.
+	 * 
+	 * @param macroName Name of this macro.
+	 * @param macroCommands Commands that compose this macro.
+	 */
+	public void addMacro(String macroName, List<String> macroCommands) {
+		macros.put(macroName, macroCommands);
+	}
+	
+	/**
+	 * Runs a macro with the given name.
+	 * Returns false if the macro with the
+	 * given name does not exist.
+	 * 
+	 * @param macroName Name of the macro.
+	 * @return True if macro was run, false if a macro with this name does not exist.
+	 */
+	public boolean runMacro(String macroName) {
+		List<String> macro = macros.get(macroName);
+		
+		if (macro == null) {
+			return false;
+		}
+		
+		for (String command : macro) {
+			parse(command);
+		}
+		
+		return true;
 	}
 }
