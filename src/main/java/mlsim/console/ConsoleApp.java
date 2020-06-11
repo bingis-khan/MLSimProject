@@ -51,8 +51,9 @@ public class ConsoleApp {
 	void run() {
 		// Temporary macro definitions.
 		parse("def adptest adp 1 # set p 30 7 5 # step");
-		parse("def basic set p 100 100 2.5 # i p 1 4 60");
+		parse("def basic set p 100 100 2.5 # i p 1 4 60 # sel bob 50 49 1");
 		parse("def sf step # full");
+		parse("def ru run simulation # update");
 		
 		while (!exit) {
 			print(">");
@@ -160,6 +161,7 @@ public class ConsoleApp {
 	 */
 	public void setPopulation(List<GAWrapper> population) {
 		currentPopulation = population;
+		addResults(null); // Removes the results of the last simulation, to avoid accidental double updating.
 	}
 	
 	/**
@@ -278,6 +280,9 @@ public class ConsoleApp {
 	 * Returns false if the macro with the
 	 * given name does not exist.
 	 * 
+	 * If there was an error during one the parsing of one of commands,
+	 * stops the execution of a macro.
+	 * 
 	 * @param macroName Name of the macro.
 	 * @return True if macro was run, false if a macro with this name does not exist.
 	 */
@@ -290,6 +295,10 @@ public class ConsoleApp {
 		
 		for (String command : macro) {
 			parse(command);
+			
+			if (parser.hadError()) {
+				break;
+			}
 		}
 		
 		return true;
