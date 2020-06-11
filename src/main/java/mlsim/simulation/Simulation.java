@@ -1,10 +1,8 @@
 package mlsim.simulation;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
@@ -40,13 +38,19 @@ public class Simulation {
 	private final Set<Entity> marked = new HashSet<>();
 	
 	// Results for tracking the scores of agents' genotypes.
-	private final Results<GAWrapper> results = new Results<>();
+	private final Results<GAWrapper> results;
+	
+	// Used for assigning ids.
+	private int nextId = 0;
 	
 	/* CONSTANTS */
 	// Protected, so it can be used by it's subclasses.
 	protected static final int STARTING_ENERGY = 30;
 	private static final int ENERGY_SUB_PER_STEP = 1,
-							 FOOD_ENERGY = 10;
+							 FOOD_ENERGY = 10,
+							 SIZE_THRESHOLD = 6;
+	
+	private static final float PER_SIZE_PENALTY = ENERGY_SUB_PER_STEP / (float)4;
 	
 	
 	/**
@@ -66,6 +70,9 @@ public class Simulation {
 		
 		placeAgents(genotypes); // Must be called BEFORE placing food, because it does not check for possible food placement.
 		placeFood(calculateFoodAmount(foodPerAgent, agents.size()));
+		
+		// Create results object.
+		results = new Results<>(genotypes);
 	}
 	
 	
@@ -95,6 +102,7 @@ public class Simulation {
 			} while (collidesAgent(agent)); // D: pretty retarded, can run infinitely
 			
 			agents.add(agent);
+			nextId++; // Looks ugly af.
 		}
 		
 		assert genotypes.size() == agents.size() : "The amount of given genotypes"
@@ -130,7 +138,7 @@ public class Simulation {
 	 * @return An agent with these coordinates.
 	 */
 	protected Agent<GAWrapper> makeAgent(GAWrapper genotype, int x, int y) {
-		return new Agent<GAWrapper>(genotype, x, y, STARTING_ENERGY);
+		return new Agent<GAWrapper>(genotype, x, y, STARTING_ENERGY, nextId);
 	}
 	
 	/**
@@ -196,7 +204,7 @@ public class Simulation {
 			}
 			
 			// Subtraction of energy.
-			agent.subtractFood(ENERGY_SUB_PER_STEP);
+			subtractFood(agent);
 			
 			// Starvation.
 			if (agent.starved()) {
@@ -207,6 +215,21 @@ public class Simulation {
 		removeMarked();
 		
 		steps++;
+	}
+	
+	/**
+	 *  Subtracting food of an agent.
+	 */
+	private void subtractFood(Agent<GAWrapper> agent) {
+		int size = agent.getSize();
+		int penalty = 0;
+		
+		// Penalty if an organism is too big.
+		if (size > SIZE_THRESHOLD) {
+			penalty = Math.round((size - SIZE_THRESHOLD) * PER_SIZE_PENALTY);
+		}
+		
+		agent.subtractFood(ENERGY_SUB_PER_STEP + penalty);
 	}
 	
 	
@@ -257,7 +280,7 @@ public class Simulation {
 	 *  of this simulation's results.
 	 */
 	private void addScore(Agent<GAWrapper> agent) {
-		results.appendGenotype(agent.getAlgorithm(), steps);
+		results.appendGenotype(agent.getId(), steps);
 	}
 	
 	

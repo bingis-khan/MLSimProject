@@ -2,6 +2,7 @@ package mlsim.console;
 
 class CommandParser {
 	private final Commands commands;
+	private boolean hadError = false;
 
 	/**
 	 * Creates a command parser with supplied commands.
@@ -35,6 +36,7 @@ class CommandParser {
 		// If command does not exist, raise error.
 		if (command == null) {
 			context.print("placeholder error\n");
+			hadError = true;
 			return;
 		}
 		
@@ -52,8 +54,10 @@ class CommandParser {
 	private void execute(Command command, Query query, ConsoleApp context) {
 		try {
 			command.execute(query, context);
+			hadError = false;
 		} catch (ParseException e) {
 			context.print(executeError(command, e.errorMessage()));
+			hadError = true;
 		}
 	}
 	
@@ -72,6 +76,15 @@ class CommandParser {
 			.append(com.usage()).append('\n');
 		
 		return sb.toString();
+	}
+	
+	/**
+	 * Checks if the last parsing had an error.
+	 * 
+	 * @return True if there was an error during the last parsing or execution.
+	 */
+	public boolean hadError() {
+		return hadError;
 	}
 
 }

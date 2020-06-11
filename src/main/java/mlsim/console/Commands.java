@@ -7,10 +7,8 @@ import mlsim.simulation.Entity;
 import mlsim.simulation.Results;
 import mlsim.simulation.Simulation;
 import mlsim.simulation.SimulationFactory;
-import mlsim.simulation.SimulationState;
 import mlsim.solution.GARandomFactory;
 import mlsim.solution.GeneticAlgorithm;
-import mlsim.util.Tuple;
 import mlsim.wrapper.GAWrapper;
 
 /*
@@ -105,6 +103,8 @@ class Commands {
 		addCommand(new Command("set parameters", "Sets simulation parameters for new simulations.", this::setSimulationParameters, "set", "se"));
 		addCommand(new Command("initialize population [minSize] [maxSize] [populationSize]", "Initializes a random population of size populationSize with GAs with size between minSize and maxSize.", this::initializePopulation, "initialize", "init", "i"));
 		addCommand(new Command("results", "Prints the results.", this::printResults, "results", "res", "r"));
+		addCommand(new Command("update", "Updates the population using the current selector.", this::updatePopulation, "update", "upd"));
+		addCommand(new Command("selector [bob|???] (selector parameters)*", "Sets the selector to the current one.", this::setSelector, "selector", "sel"));
 		
 		addCommand(new Command("step", "Steps through the simulation.", this::step, "step", "s"));
 		addCommand(new Command("full", "XXXD.", this::full, "full"));
@@ -155,6 +155,21 @@ class Commands {
 		context.addResults(results);
 	}
 	
+	private void updatePopulation(Query query, ConsoleApp context) {
+		if (context.hasActiveSimulation()) {
+			query.throwError("Cannot set a new population while a simulation is running.");
+		}
+		
+		if (context.getSelector() == null) {
+			query.throwError("There is no selector to update the population.");
+		}
+		
+		Results<GAWrapper> results = context.getResults();
+		
+		List<GAWrapper> newPopulation = context.getSelector().updatePopulation(results.genotypes(), results.fitness());
+		context.setPopulation(newPopulation);
+	}
+	
 	 private void initializePopulation(Query query, ConsoleApp context) {
 		query.consume("population", "pop", "p");
 		
@@ -185,12 +200,28 @@ class Commands {
 	private void printResults(Query query, ConsoleApp context) {
 		if (context.getResults() == null) query.throwError("No results to display.");
 		
-		List<Tuple<GAWrapper, Integer>> results = context.getResults().scoredGenotypes(); 
+		List<Integer> fitness = context.getResults().fitness(); 
 		
 		context.print("id| steps");
-		for (int i = 0; i < results.size(); i++) {
-			context.print(i + "| " + results.get(i).second() + "\n");
+		for (int i = 0; i < fitness.size(); i++) {
+			context.print(i + "| " + fitness.get(i) + "\n");
 		}
+	}
+	
+	private void setSelector(Query query, ConsoleApp context) {
+		if (context.hasActiveSimulation()) {
+			query.throwError("Cannot set a new selector when there is a simulation running.");
+		}
+		
+		query.consume("bob");
+		
+		int sel = query.consumeInt(),
+			cro = query.consumeInt(),
+			mut = query.consumeInt();
+		
+		Selector selector = new Selector(sel, cro, mut);
+		
+		context.setSelector(selector);
 	}
 	
 	private static GAWrapper perfect() {
@@ -269,6 +300,26 @@ class Commands {
 		}
 		
 		context.print(builder.toString());
+	}
+	
+	/* TODO */
+	private void inspect(Query query, ConsoleApp context) {
+		if (!context.hasActiveSimulation()) {
+			query.throwError("Must have an active simulation to inspect an organism.");
+		}
+		
+		int agentIndex = query.consumeInt();
+		List<? extends Entity> agents = context.getSimulation().getSimulationState().agents();
+		
+		if (agentIndex < 0) {
+			query.throwError("Agent index must be greater or equal to 0..");
+		}
+		
+		if (agentIndex >= agents.size()) {
+			query.throwError("Agent index too high. Number of agents: " + agents.size());
+		}
+		
+		//Agent<GAWrapper> agent = (Agent<GAWrapper>)agents.get(agentIndex);
 	}
 	
 	private void area(Query query, ConsoleApp context) {
