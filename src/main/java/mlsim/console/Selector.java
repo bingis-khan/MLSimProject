@@ -58,8 +58,8 @@ class Selector {
 		assert old.size() == fitness.size() : "Population size must be equal to the size of the list of fitnesses.";
 		
 		int selectGa = Math.round(old.size() * selection / (float)100),
-			crossoverGa = Math.round(old.size() * crossover / (float)100),
-			mutationGa = old.size() - selectGa - crossoverGa;
+			crossoverGa = Math.round(old.size() * crossover / (float)100)/2,
+			mutationGa = old.size() - selectGa - 2*crossoverGa;
 		
 		List<GAWrapper> newPopulation = new ArrayList<>();
 		
