@@ -14,7 +14,12 @@ import javax.imageio.ImageIO;
 import mlsim.simulation.Entity;
 import mlsim.simulation.Simulation;
 import mlsim.simulation.SimulationState;
-
+/**
+ * class has the environment of the simulation
+ * 
+ * @author bingis_khan 
+ *
+ */
 public class Gui {
 
 	private Display display;
@@ -52,9 +57,9 @@ public class Gui {
 		keyManager = new KeyManager();
 		
 		try {
-			bgImage = ImageIO.read(new File("src/main/resources/t³o.jpg"));
+			bgImage = ImageIO.read(new File("src/main/resources/tÂ³o.jpg"));
 			agentImage = ImageIO.read(new File("src/main/resources/spurdo.jpg"));
-			foodImage = ImageIO.read(new File("src/main/resources/jab³ko.jpg"));
+			foodImage = ImageIO.read(new File("src/main/resources/jabÂ³ko.jpg"));
 		} catch(IOException e) {
 			throw new RuntimeException("Bruh, images can't load. Shieet." + e.getMessage());
 		}
@@ -83,7 +88,9 @@ public class Gui {
 			y += moveX;
 		}
 	}
-
+	/**
+	 * Draw on the canvas.
+ 	*/
 	public void render() {
 		bs = display.getCanvas().getBufferStrategy();
 		if (bs == null) {
@@ -101,7 +108,11 @@ public class Gui {
 	}
 	
 	/* PAT (poprawione) */
-
+	/**
+	 * 
+	 * Draw agents and food on the board 
+	 * 
+	 */
 	void render(Graphics g, int x, int y, int width, int height, SimulationState s) {
 		// Draw background
 		g.drawImage(bgImage, 0, 0, windowWidth, windowHeight, null);
@@ -119,13 +130,18 @@ public class Gui {
 
 		g.drawString(ticksPerSecond+"", windowWidth - 15, 10);
 	}
-
+	/**
+	 * Method of drawing agents on the board
+	 * @param g, x, y,,cellWidth, cellHeight, entityimage
+	 */
 	void drawEntity(Graphics g, int x, int y, int cellWidth, int cellHeight, BufferedImage entityimage) {
 		g.drawImage(entityimage, x * cellWidth, y * cellHeight, cellWidth, cellHeight, null);
 	}
 	
 	/* END PAT */
-
+	/**
+	 * main method which shows environment of simulation
+	 */
 	public void run() {
 		init();
 
