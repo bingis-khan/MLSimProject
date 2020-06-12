@@ -41,3 +41,6 @@ Ponad to każdy ma szansę na mutacje, z odpowiednim niewielkim prawdopodobieńs
 ## POMOCY!!!! (czyli więcej jest tych komend)
 - help // Wyświetla wszystkie komendy.
 - help help // Wyświetla dokładny opis komendy o tej nazwie (tych nazwach), w tym przypadku 'help', samej siebie.
+
+## I najważniejsze...
+- To ML, więc nie oczekuj, że coś od razu (jeśli w ogóle) fajnego wyjdzie D:<
