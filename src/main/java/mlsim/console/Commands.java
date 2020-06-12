@@ -120,8 +120,10 @@ class Commands {
 		addCommand(new Command("gui", "Turn on the gui.", this::gui, "gui"));
 		addCommand(new Command("steps", "Prints the number of steps of this simulation.", this::steps, "steps"));
 		
-		addCommand(new Command("define macro macro_name ([string]+ #)+", "Defines a single macro.", this::defineMacro, "define", "def"));
+		addCommand(new Command("define macro macro_name ([string]+ #)+", "Defines a single macro. A macro is a combination of '#' delimited commands.", this::defineMacro, "define", "def"));
 		addCommand(new Command("macro macro_name", "Runs a macro with this name.", this::runMacro, "macro", "m"));
+		
+		addCommand(new Command("help command-name!", "Prints all available commands or command info if the command-name is given.", this::help, "help", "h"));
 	}
 	
 	/**
@@ -515,6 +517,47 @@ class Commands {
 		}
 		
 		context.print(context.getSimulation().getSteps() + "\n");
+	}
+	
+	private void help(Query query, ConsoleApp context) {
+		if (!query.isAtEnd()) {
+			String commandName = query.next();
+			Command com = find(commandName);
+			
+			if (com == null) {
+				query.throwError("Command not found.");
+			}
+			
+			context.print(commandInfo(com));
+			
+			return;
+		}
+		
+		StringBuilder sb = new StringBuilder();
+		for (Command com : commands) {
+			for (String name : com.names()) {
+				sb.append(name).append(" ");
+			}
+			sb.append(": ").append(com.usage()).append('\n');
+		}
+		
+		context.print(sb.toString());
+		
+		return;
+	}
+	
+	private String commandInfo(Command com) {
+		StringBuilder sb = new StringBuilder();
+		
+		for (String name : com.names()) {
+			sb.append('|').append(name);
+		}
+		sb.append("|: ");
+		
+		sb.append(com.usage()).append('\n');
+		sb.append("	").append(com.description()).append('\n');
+		
+		return sb.toString();
 	}
 	
 	/* Debug */
