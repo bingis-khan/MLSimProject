@@ -11,13 +11,12 @@ import mlsim.wrapper.GAWrapper;
 
 /**
  * Simulation is a class that represents a single simulation.
- * <br>
+ * 
  * Given its width and height, creates a plane with those dimensions.
  * On this plane, organisms can move, eat, fight.
  * Food per Agent is the number of food samples that will be placed randomly on a plane. 
  * Total number of food samples is calculated as follows: round(foodPerAgents x numAgents)
  * A simulation also needs the solutions themselves to control the agents.
- * <br>
  * 
  * 
  * @author bingis_khan
@@ -374,7 +373,7 @@ public class Simulation {
 	
 	/**
 	 * Returns the simulation state of this simulation.
-	 * Changing state through this object is <b>undefined behavior<b>.
+	 * Changing state through this object is <b>undefined behavior</b>.
 	 * 
 	 * @return SimulationState of this simulation.
 	 */

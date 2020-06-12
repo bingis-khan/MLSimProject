@@ -19,7 +19,7 @@ class CommandParser {
 	 * be parsed, prints usage info of this command.
 	 * 
 	 * @param input The user's input.
-	 * @param environment The context in which the command will be executed.
+	 * @param context The context in which the command will be executed.
 	 */
 	void parse(String input, ConsoleApp context) {
 		Query userQuery = new Query(input);

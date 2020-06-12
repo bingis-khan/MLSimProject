@@ -7,6 +7,8 @@ import mlsim.operators.Mutable;
 import mlsim.simulation.Entity;
 import mlsim.simulation.Move;
 import mlsim.simulation.SimulationState;
+
+
 /**
  * There are values which manage agents to get food 
  * 
@@ -17,7 +19,7 @@ public abstract class Wrapper<T extends Wrapper<T>> implements Mutable<T>, Cross
 	
 	/**
 	 * Calculates where the main should move to get closer to moveTo.
-	 * However, 'balanced' means, that if the yDistance > xDistance, 
+	 * However, 'balanced' means, that if the yDistance is greater than xDistance, 
 	 * it will chose to move in y instead of x.
 	 * 
 	 * @param main The entity of our perspective.

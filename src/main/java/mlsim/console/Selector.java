@@ -14,9 +14,6 @@ import mlsim.wrapper.GAWrapper;
  * - crossover
  * - mutation
  * 
- * @param <GAWrapper>
- * @param old Old population.
- * @param fitness Fitness of this population
  */
 class Selector {
 	private static final Random RAND = new Random();
