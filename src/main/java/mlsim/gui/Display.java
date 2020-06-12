@@ -7,10 +7,6 @@ import java.awt.event.WindowListener;
 
 import javax.swing.JFrame;
 
-/**
- * Class contain a simulation window
- * 
- */
 public class Display {
 	
 	private JFrame frame;
@@ -71,16 +67,11 @@ public class Display {
 		frame.add(canvas);
 		frame.pack();
 	}
-	/**
-	 * Method returns size canvas
-	 * 
-	 */
+	
 	public Canvas getCanvas() {
 		return canvas;
 	}
-	/**
-	 * @return value of frame 
-	 */
+	
 	public JFrame getFrame() {
 		return frame;
 	}
