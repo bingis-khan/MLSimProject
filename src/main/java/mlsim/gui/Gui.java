@@ -4,7 +4,10 @@ import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.nio.file.Paths;
 
 import javax.imageio.ImageIO;
 
@@ -24,29 +27,36 @@ public class Gui {
 	private BufferStrategy bs;
 	private Graphics g;
 
-	private int ticksPerSecond = 0;
-
-	// Temp
-	private int os = 0;
-
 	// Input
 	private KeyManager keyManager;
 	
+	private int ticksPerSecond;
+	
+	// Camera
+	int x = 0, y = 0, width, height;
+	
+	private boolean paused = false;
+	
 	private final BufferedImage agentImage, foodImage, bgImage;
 
+	
 	public Gui(String title, int windowWidth, int windowHeight, Simulation simulation) {
 		this.windowWidth = windowWidth;
 		this.windowHeight = windowHeight;
 		this.title = title;
 		this.simulation = simulation;
+		
+		width = simulation.getWidth();
+		height = simulation.getHeight();
+		
 		keyManager = new KeyManager();
 		
 		try {
-			bgImage = ImageIO.read(getClass().getResource("t³o.jpg"));
-			agentImage = ImageIO.read(getClass().getResource("spinacz.jpg"));
-			foodImage = ImageIO.read(getClass().getResource("jablko.jpg"));
+			bgImage = ImageIO.read(new File("src/main/resources/t³o.jpg"));
+			agentImage = ImageIO.read(new File("src/main/resources/spurdo.jpg"));
+			foodImage = ImageIO.read(new File("src/main/resources/jab³ko.jpg"));
 		} catch(IOException e) {
-			throw new RuntimeException("Bruh, images can't load. Shieet.");
+			throw new RuntimeException("Bruh, images can't load. Shieet." + e.getMessage());
 		}
 	}
 
@@ -60,8 +70,18 @@ public class Gui {
 	}
 
 	private void tick() {
-		if (keyManager.keyJustPressed(KeyEvent.VK_O))
-			os++;
+		if (keyManager.keyJustPressed(KeyEvent.VK_SPACE)) {
+			paused = !paused;
+		}
+	}
+	
+	private void move(int moveX, int moveY) {
+		if (x + moveX >= 0 && y + moveY >= 0 &&
+				width + x + moveX < simulation.getWidth() &&
+				height + y + moveY < simulation.getHeight()) {
+			x += moveX;
+			y += moveX;
+		}
 	}
 
 	public void render() {
@@ -72,13 +92,8 @@ public class Gui {
 		}
 		g = bs.getDrawGraphics();
 
-		// Drawin'
-
-		// Current frame.
-		BufferedImage frame = render(0, 0, simulation.getWidth(), simulation.getHeight(),
-				simulation.getSimulationState());
-		// Draws it on the canvas.
-		g.drawImage(frame, 0, 0, windowWidth, windowHeight, null);
+		
+		render(g, x, y, width, height, simulation.getSimulationState());
 
 		// End drawin'
 		bs.show();
@@ -87,23 +102,22 @@ public class Gui {
 	
 	/* PAT (poprawione) */
 
-	BufferedImage render(int x, int y, int width, int height, SimulationState s) {
-		BufferedImage background = new BufferedImage(bgImage.getWidth(), bgImage.getHeight(), BufferedImage.TYPE_INT_RGB);
-		Graphics g = background.getGraphics();
-
-		int cellWidth = bgImage.getWidth() / width;
-		int cellHeight = bgImage.getHeight() / height;
+	void render(Graphics g, int x, int y, int width, int height, SimulationState s) {
+		// Draw background
+		g.drawImage(bgImage, 0, 0, windowWidth, windowHeight, null);
+		
+		int cellWidth = windowWidth / width;
+		int cellHeight = windowHeight / height;
 
 		for (Entity agent : s.agents()) {
-			drawEntity(g, x - agent.getX(), y - agent.getY(), cellWidth, cellHeight, agentImage);
+			drawEntity(g, agent.getX() - x, agent.getY() - y, cellWidth, cellHeight, agentImage);
 		}
+		
 		for (Entity food : s.food()) {
-			drawEntity(g, x - food.getX(), y - food.getY(), cellWidth, cellHeight, foodImage);
+			drawEntity(g, food.getX() - x, food.getY() - y, cellWidth, cellHeight, foodImage);
 		}
-		g.dispose();
 
-		return background;
-
+		g.drawString(ticksPerSecond+"", windowWidth - 15, 10);
 	}
 
 	void drawEntity(Graphics g, int x, int y, int cellWidth, int cellHeight, BufferedImage entityimage) {
@@ -140,7 +154,7 @@ public class Gui {
 				if (stepTicks == ticksPerStep) { // Step through the simulation every few ticks.
 					stepTicks = 0;
 
-					simulation.step();
+					if (!paused) simulation.step();
 				}
 			}
 			if (timer >= 1000000000) {

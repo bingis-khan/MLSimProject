@@ -10,7 +10,7 @@ import mlsim.util.Tuple;
 
 
 public class GAWrapper extends Wrapper<GAWrapper> {
-	public static final int PRE = 4, POST = 2;
+	public static final int PRE = 17, POST = 2;
 	
 	private static final FlagSetter setter = FlagSetter.defaultSetter();
 	

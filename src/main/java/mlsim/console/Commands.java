@@ -191,7 +191,7 @@ class Commands {
 		
 		if (populationSize < 1) query.throwError("Population size must be greater than 0.");
 		
-		context.setPopulation(GARandomFactory.generatePopulation(minSize, maxSize, populationSize, 4, 2));
+		context.setPopulation(GARandomFactory.generatePopulation(minSize, maxSize, populationSize, GAWrapper.PRE, GAWrapper.POST));
 	}
 	
 	private void setSimulationParameters(Query query, ConsoleApp context) {
