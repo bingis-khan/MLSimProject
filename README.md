@@ -8,7 +8,7 @@ Nowa populaja powstaje poprzez wywołanaie metody crossover tyle razy, ile wynos
 Wszystko dodatkowo wzbogacone jest o element niepewności związany z prawdopodobieństwem wykonania tej operacji. Zajdzie ona tylko wówczas, gdy losowa liczba nie przekroczy odpowiednio ustalonego progu. Tak więc po zapełnieniu nowej populacji przez osobniki potomne, przychodzi czas na dopełnienie jej do rozmiarów poprzedniczki. Dzieję się to poprzez wybranie (ponownie metodą ruletki) obiektów GA, które zostaną w całości skopionawe dalej. 
 Ponad to każdy ma szansę na mutacje, z odpowiednim niewielkim prawdopodobieństwem. Mutacja polega na zamianie w losowo wybranej zasadzie, jednej wartości prawda fałsz na przeciwną. Następnie ciąg wydarzeń powtarza się, dzięki czemu dążymy aby nowe populacje zawierały co raz to lepsze algorytmy genetyczne.
 
-## Podstawowa pętla sterowania
+## Podstawowa pętla sterowania i pierwsze kroki
 - echo CZY TO DZIAŁA?!
 - initialize population 1 4 100  // Tworzy losową populację o wielkości 100 z wielkością zasad <1, 4>.
 - selector bob 50 49 1  // Selektor typu 'bob' z parametrami selection=50, crossover=49, mutation=1. (Są to procenty całej populacji.)
