@@ -57,9 +57,9 @@ public class Gui {
 		keyManager = new KeyManager();
 		
 		try {
-			bgImage = ImageIO.read(new File("src/main/resources/t³o.jpg"));
+			bgImage = ImageIO.read(new File("src/main/resources/tlo.jpg"));
 			agentImage = ImageIO.read(new File("src/main/resources/spurdo.jpg"));
-			foodImage = ImageIO.read(new File("src/main/resources/jab³ko.jpg"));
+			foodImage = ImageIO.read(new File("src/main/resources/jablko.jpg"));
 		} catch(IOException e) {
 			throw new RuntimeException("Bruh, images can't load. Shieet." + e.getMessage());
 		}
