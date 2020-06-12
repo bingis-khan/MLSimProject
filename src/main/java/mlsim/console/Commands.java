@@ -107,16 +107,16 @@ class Commands {
 		addCommand(new Command("initialize population [minSize] [maxSize] [populationSize]", "Initializes a random population of size populationSize with GAs with size between minSize and maxSize.", this::initializePopulation, "initialize", "init", "i"));
 		addCommand(new Command("results", "Prints the results.", this::printResults, "results", "res", "r"));
 		addCommand(new Command("update", "Updates the population using the current selector.", this::updatePopulation, "update", "upd"));
-		addCommand(new Command("selector [bob|???] (selector parameters)*", "Sets the selector to the current one.", this::setSelector, "selector", "sel"));
+		addCommand(new Command("selector [bob] (selector parameters)*", "Sets the selector to the current one.", this::setSelector, "selector", "sel"));
 		addCommand(new Command("batch num-rounds sims-per-round","Batch training.", this::batch, "batch"));
 		addCommand(new Command("save file-name", "Saves the current population with this file-name.", this::save, "save"));
 		addCommand(new Command("load file-name", "Loads the population with this file-name.", this::load, "load"));
 		
 		addCommand(new Command("step", "Steps through the simulation.", this::step, "step", "s"));
-		addCommand(new Command("full", "XXXD.", this::full, "full"));
-		addCommand(new Command("end", "XXXD.", this::end, "end"));
+		addCommand(new Command("full", "Prints hole a simulation map.", this::full, "full"));
+		addCommand(new Command("end", "Ends a simulation and saving a simulation results.", this::end, "end"));
 		addCommand(new Command("finish", "Finish the simulation and save the results. ", this::finish, "finish", "fin"));
-		addCommand(new Command("adp", "XXXD.", this::addPerfect, "adp"));
+		addCommand(new Command("adp", "Dont use.", this::addPerfect, "adp"));
 		addCommand(new Command("gui", "Turn on the gui.", this::gui, "gui"));
 		addCommand(new Command("steps", "Prints the number of steps of this simulation.", this::steps, "steps"));
 		
