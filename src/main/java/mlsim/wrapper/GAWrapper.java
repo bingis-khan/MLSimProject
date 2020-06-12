@@ -1,6 +1,6 @@
 package mlsim.wrapper;
 
-import java.util.List;
+import java.util.Random;
 
 import mlsim.simulation.Entity;
 import mlsim.simulation.Move;
@@ -16,6 +16,8 @@ public class GAWrapper extends Wrapper<GAWrapper> {
 	
 	private final GeneticAlgorithm ga;
 	
+	private static final Random RAND = new Random();
+	
 	public GAWrapper(GeneticAlgorithm ga) {
 		assert ga.postSize() == POST; // Four movement types: NSWE
 		
@@ -29,11 +31,22 @@ public class GAWrapper extends Wrapper<GAWrapper> {
 		assert flags.length == PRE : "Converted flags must be equal to the current precondition.";
 		
 		int intMove = ga.evaluate(flags);
+		
+		// Sentinel symbolizing that none matched, so we decided, that it makes a random move.
+		if (intMove == -1) {
+			return randomMove();
+		}
+		
 		return toMove(intMove);
 	}
 	
+	private Move randomMove() {
+		Move[] values = Move.values();
+		return values[RAND.nextInt(values.length)];
+	}
+	
 	private Move toMove(int i) {
-		assert i >= 0 : "i must be greater or equal 0.";
+		assert i >= 0 : "i must be greater or equal 0. Was: " + i;
 		assert i < 4 : "i must be smaller than 4.";
 		
 		switch (i) {

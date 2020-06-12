@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import mlsim.gui.Gui;
 import mlsim.simulation.Entity;
 import mlsim.simulation.Results;
 import mlsim.simulation.Simulation;
@@ -116,6 +117,8 @@ class Commands {
 		addCommand(new Command("end", "XXXD.", this::end, "end"));
 		addCommand(new Command("finish", "Finish the simulation and save the results. ", this::finish, "finish", "fin"));
 		addCommand(new Command("adp", "XXXD.", this::addPerfect, "adp"));
+		addCommand(new Command("gui", "Turn on the gui.", this::gui, "gui"));
+		addCommand(new Command("steps", "Prints the number of steps of this simulation.", this::steps, "steps"));
 		
 		addCommand(new Command("define macro macro_name ([string]+ #)+", "Defines a single macro.", this::defineMacro, "define", "def"));
 		addCommand(new Command("macro macro_name", "Runs a macro with this name.", this::runMacro, "macro", "m"));
@@ -244,8 +247,11 @@ class Commands {
 	private void addPerfect(Query query, ConsoleApp context) {
 		int amount = query.consumeInt();
 		List<GAWrapper> gas = new ArrayList<GAWrapper>();
-		for (int i = 0; i < amount; i++) 
-			gas.add(perfect());
+		for (int i = 0; i < amount; i++) {
+			GAWrapper gaw = perfect();
+			assert gaw != null;
+			gas.add(gaw);
+		}
 		
 		context.setPopulation(gas);
 	}
@@ -492,6 +498,23 @@ class Commands {
 		Results<GAWrapper> results = context.getSimulation().finish();
 		context.addResults(results);
 		context.removeActiveSimulation();
+	}
+	
+	private void gui(Query query, ConsoleApp context) {
+		if (!context.hasActiveSimulation()) {
+			query.throwError("Must have an active simulation to use gui.");
+		}
+		
+		Gui gui = new Gui("Bap", 800, 600, context.getSimulation());
+		gui.run();
+	}
+	
+	private void steps(Query query, ConsoleApp context) {
+		if (!context.hasActiveSimulation()) {
+			query.throwError("Must have an active simulation.");
+		}
+		
+		context.print(context.getSimulation().getSteps() + "\n");
 	}
 	
 	/* Debug */

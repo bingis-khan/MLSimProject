@@ -43,6 +43,8 @@ public class ConsoleApp {
 	public static void main(String[] args) {
 		CommandParser parser = new CommandParser(Commands.initialize());
 		new ConsoleApp(parser).run();
+		
+		System.exit(0);
 	}
 	
 	public ConsoleApp(CommandParser parser) {

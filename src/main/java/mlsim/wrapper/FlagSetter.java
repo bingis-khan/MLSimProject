@@ -65,6 +65,11 @@ class FlagSetter {
 	
 	private boolean[] closestFood(Entity self, SimulationState s) {
 		Entity closestFood = Wrapper.smallestDistance(self, s.food());
+		
+		if (closestFood == null) {
+			return new boolean[4];
+		}
+		
 		Move moveFood = Wrapper.moveBalanced(self, closestFood);
 		
 		boolean[] flags = new boolean[4];
