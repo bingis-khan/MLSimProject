@@ -7,7 +7,10 @@ import mlsim.operators.Mutable;
 import mlsim.simulation.Entity;
 import mlsim.simulation.Move;
 import mlsim.simulation.SimulationState;
-
+/**
+ * There are values which manage agents to get food 
+ * 
+ */
 public abstract class Wrapper<T extends Wrapper<T>> implements Mutable<T>, Crossover<T> {
 	
 	public abstract Move evaluate(Entity self, SimulationState s);
