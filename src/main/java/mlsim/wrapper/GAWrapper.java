@@ -8,6 +8,9 @@ import mlsim.simulation.SimulationState;
 import mlsim.solution.GeneticAlgorithm;
 import mlsim.util.Tuple;
 
+/** 
+ * Take the genetic algorithm and adapt for use by simulation
+ */
 
 public class GAWrapper extends Wrapper<GAWrapper> {
 	public static final int PRE = 17, POST = 2;
