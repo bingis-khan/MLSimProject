@@ -32,7 +32,7 @@ Ponad to każdy ma szansę na mutacje, z odpowiednim niewielkim prawdopodobieńs
        
 ## Makra
 - define super_reatard echo zupa # echo z kakaem # echo stoopid // Tworzenie nowego makra o nazwie 'super_reatard'. Każda komenda jest podzielona znakiem '#'.
-- m retard // m wywołuje makro o nazwie 'super_reatard'. Wywołuje to zdefiniowane wcześniej makro.
+- m super_reatard // m wywołuje makro o nazwie 'super_reatard'. Wywołuje to zdefiniowane wcześniej makro.
 
 ## Zapisywanie
 - save epicween // Zapisuje populację w pliku o nazwie 'epicween'.
