@@ -123,12 +123,21 @@ public class ConsoleApp {
 	}
 	
 	/**
-	 * Returns the current selector.
-	 *  
-	 * @return This ConsoleApp's Selector.
+	 * Update the population, given this fitness.
+	 * 
+	 * @param fitness Fitness
 	 */
-	public Selector getSelector() {
-		return selector;
+	public void updatePopulation(List<Integer> fitness) {
+		currentPopulation = selector.updatePopulation(currentPopulation, fitness);
+	}
+	
+	/**
+	 * Checks if the selector is set.
+	 * 
+	 * @return True if it has an active selector.
+	 */
+	public boolean hasSelector() {
+		return selector != null;
 	}
 	
 	/**

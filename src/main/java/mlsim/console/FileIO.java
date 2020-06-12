@@ -14,7 +14,7 @@ import mlsim.wrapper.GAWrapper;
 
 public class FileIO {
 	// Temporary constants.
-	private static final int PRE = 4, POST = 2;
+	private static final int PRE = GAWrapper.PRE, POST = GAWrapper.POST;
 	
 	List<GAWrapper> load(String fileName) throws IOException {
 		fileName = fileName + ".dupa";

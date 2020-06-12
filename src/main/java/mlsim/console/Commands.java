@@ -2,6 +2,7 @@ package mlsim.console;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import mlsim.simulation.Entity;
@@ -106,6 +107,7 @@ class Commands {
 		addCommand(new Command("results", "Prints the results.", this::printResults, "results", "res", "r"));
 		addCommand(new Command("update", "Updates the population using the current selector.", this::updatePopulation, "update", "upd"));
 		addCommand(new Command("selector [bob|???] (selector parameters)*", "Sets the selector to the current one.", this::setSelector, "selector", "sel"));
+		addCommand(new Command("batch num-rounds sims-per-round","Batch training.", this::batch, "batch"));
 		addCommand(new Command("save file-name", "Saves the current population with this file-name.", this::save, "save"));
 		addCommand(new Command("load file-name", "Loads the population with this file-name.", this::load, "load"));
 		
@@ -163,14 +165,13 @@ class Commands {
 			query.throwError("Cannot set a new population while a simulation is running.");
 		}
 		
-		if (context.getSelector() == null) {
+		if (!context.hasSelector()) {
 			query.throwError("There is no selector to update the population.");
 		}
 		
 		Results<GAWrapper> results = context.getResults();
 		
-		List<GAWrapper> newPopulation = context.getSelector().updatePopulation(results.genotypes(), results.fitness());
-		context.setPopulation(newPopulation);
+		context.updatePopulation(results.fitness());
 	}
 	
 	 private void initializePopulation(Query query, ConsoleApp context) {
@@ -392,6 +393,90 @@ class Commands {
 		}
 	}
 	
+	private void batch(Query query, ConsoleApp context) {
+		
+		if (context.hasActiveSimulation()) {
+			query.throwError("Cannot batch train when there is an active simulation running.");
+		}
+		
+		if (!context.hasSelector()) {
+			query.throwError("No selector.");
+		}
+		
+		if (!context.isPopulationInitialized()) {
+			query.throwError("Population is not initialized.");
+		}
+		
+		if (context.getSimulationFactory() == null) {
+			query.throwError("Simulation parameters not set.");
+		}
+		
+		final int trainingRounds = query.consumeInt();
+		final int simulationsPerRound = query.consumeInt();
+		
+		if (trainingRounds <= 0) {
+			query.throwError("Number of rounds must be greater than 0.");
+		}
+		
+		if (simulationsPerRound <= 0) {
+			query.throwError("Number of simulations per round must be greater than 0.");
+		}
+		
+		
+		for (int round = 0; round < trainingRounds; round++) {
+			context.print("ROUND [" + (round+1) + "]: Running... ");
+			List<Integer> fitness = round(context, simulationsPerRound);
+			context.print("Completed!\n");
+			
+			context.updatePopulation(fitness);
+		}
+	}
+	
+	private List<Integer> round(ConsoleApp context, final int simulationsPerRound) {
+		List<Integer> fitness = null;
+		for (int i = 0; i < simulationsPerRound; i++) {
+			List<Integer> currentFitness = context.newSimulation().finish().fitness();
+			if (fitness == null) {
+				fitness = currentFitness;
+			} else {
+				addTo(fitness, currentFitness);
+			}
+		}
+		
+		divideAll(fitness, simulationsPerRound);
+		int max = Collections.max(fitness);
+		double avg = calculateAverage(fitness);
+		
+		context.print("Max:" + max + " | Avg: " + avg + " ");
+		
+		return fitness;
+	}
+	
+	private static double calculateAverage(List<Integer> list) {
+		int sum = 0;
+		for (int i : list) 
+			sum += i;
+		
+		return sum / (double)list.size();
+	}
+	
+	private static void addTo(List<Integer> to, List<Integer> from) {
+		assert to.size() == from.size() : "To size must be equal to from size.";
+		
+		for (int i = 0; i < to.size(); i++) {
+			int added = to.get(i) + from.get(i);
+			to.set(i, added);
+		}
+	}
+	
+	private static void divideAll(List<Integer> list, final int divisor) {
+		for (int i = 0; i < list.size(); i++) {
+			int divided = list.get(i) / divisor;
+			
+			assert divided > 0;
+			list.set(i, divided);
+		}
+	}
 	
 	/* Debug */
 	

@@ -245,13 +245,20 @@ class Rule {
 		StringBuilder rule = new StringBuilder();
 		
 		for (boolean b : preCondition) {
-			rule.append(b ? '1' : '0');
+			rule.append(booleanToChar(b));
 		}
 		
 		for (boolean b : postCondition) {
-			rule.append(b ? '1' : '0');
+			rule.append(booleanToChar(b));
 		}
 		
 		return rule.toString();
+	}
+	
+	/**
+	 * Converts this boolean to char '1' or '0'.
+	 */
+	private char booleanToChar(boolean b) {
+		return b ? '1' : '0';
 	}
 }

@@ -40,11 +40,20 @@ class Selector {
 		// Selecting
 		int selectedFitness = RAND.nextInt(combinedFitness) + 1;
 		int selectIndex = -1;
+		// Ehh, looks bad, but works as intended.
 		for (int fitnessSum = 0; fitnessSum < selectedFitness; selectIndex++, fitnessSum += fitness.get(selectIndex));
 		
 		return old.get(selectIndex);
 	}
 	
+	// DEPENDS ON THE CORRECT ORDERING OF BOTH LISTS, WHICH IS AN ANTIPATTERN. FUCK
+	/**
+	 * Updates the population based on the selectors parameters.
+	 * 
+	 * @param old Old population.
+	 * @param fitness Fitness of this population.
+	 * @return New, updated population.
+	 */
 	List<GAWrapper> updatePopulation(List<GAWrapper> old, List<Integer> fitness) {
 		assert old.size() == fitness.size() : "Population size must be equal to the size of the list of fitnesses.";
 		

@@ -16,11 +16,16 @@ import mlsim.wrapper.GAWrapper;
  */
 public class Results<Genotype> {
 	private final List<GAWrapper> genotypes;
-	private final int[] fitnessScores;
+	private final List<Integer> fitnessScores;
 	
 	Results(List<GAWrapper> genotypes) {
 		this.genotypes = genotypes;
-		fitnessScores = new int[genotypes.size()];
+		fitnessScores = new ArrayList<>();
+		
+		// Fill it with default values, otherwise set will throw an exception. 
+		for (int i = 0; i < genotypes.size(); i++) {
+			fitnessScores.add(0);
+		}
 	}
 	
 	/**
@@ -29,13 +34,7 @@ public class Results<Genotype> {
 	 * @return List with the genotypes' fitness.
 	 */
 	public List<Integer> fitness() {
-		// AAHHHH FUCK, ASDADSASDDSAOJDJAOSDNAODSN
-		List<Integer> fitnessScoresList = new ArrayList<>();
-		for (int id = 0; id < fitnessScores.length; id++) {
-			fitnessScoresList.add(fitnessScores[id]);
-		}
-		
-		return fitnessScoresList;
+		return fitnessScores;
 	}
 	
 	/**
@@ -49,11 +48,13 @@ public class Results<Genotype> {
 	
 	/**
 	 * Appends the fitness of the genotype with this id.
+	 * AAHAHAHAHSHDIAISDNAISDNASIDNASD IT SUCKS DICK
+	 * I CAN'T THINK STRAIGHT
 	 * 
 	 * @param id Id of the genotype.
 	 * @param fitness Its fitness.
 	 */
 	void appendGenotype(int id, int fitness) {
-		fitnessScores[id] = fitness;
+		fitnessScores.set(id, fitness);
 	}
 }

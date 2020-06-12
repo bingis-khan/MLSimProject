@@ -10,10 +10,12 @@ import mlsim.util.Tuple;
 
 
 public class GAWrapper extends Wrapper<GAWrapper> {
+	public static final int PRE = 4, POST = 2;
+	
 	private final GeneticAlgorithm ga;
 	
 	public GAWrapper(GeneticAlgorithm ga) {
-		assert ga.postSize() == 2; // Four movement types: NSWE
+		assert ga.postSize() == POST; // Four movement types: NSWE
 		
 		this.ga = ga;
 	}
@@ -26,7 +28,7 @@ public class GAWrapper extends Wrapper<GAWrapper> {
 		Entity closestFood = smallestDistance(self, food);
 		Move moveFood = moveBalanced(self, closestFood);
 		
-		boolean[] flags = new boolean[4];
+		boolean[] flags = new boolean[PRE];
 		
 		switch (moveFood) {
 			case NORTH: flags[0] = true; break;

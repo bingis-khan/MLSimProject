@@ -138,6 +138,7 @@ public class Simulation {
 	 * @return An agent with these coordinates.
 	 */
 	protected Agent<GAWrapper> makeAgent(GAWrapper genotype, int x, int y) {
+		// ASSIGNING IDS IS A BOTCHED AND RETARDED SOLUTION.
 		return new Agent<GAWrapper>(genotype, x, y, STARTING_ENERGY, nextId);
 	}
 	
