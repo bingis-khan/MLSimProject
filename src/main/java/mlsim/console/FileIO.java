@@ -16,6 +16,13 @@ public class FileIO {
 	// Temporary constants.
 	private static final int PRE = GAWrapper.PRE, POST = GAWrapper.POST;
 	
+	/**
+	 * Loads a single population.
+	 * 
+	 * @param fileName File name. A special extension is added to the filename.
+	 * @return Population.
+	 * @throws IOException If there is a problem with loading.
+	 */
 	List<GAWrapper> load(String fileName) throws IOException {
 		fileName = fileName + ".dupa";
 		
@@ -31,7 +38,7 @@ public class FileIO {
 		return gas;
 	}
 	
-	boolean[] stringToBooleanArray(String s) {
+	private boolean[] stringToBooleanArray(String s) {
 		boolean[] binary = new boolean[s.length()];
 		
 		for (int i = 0; i < s.length(); i++) {
@@ -48,6 +55,13 @@ public class FileIO {
 		return binary;
 	}
 	
+	/**
+	 * Saves the population in the specified file.
+	 * 
+	 * @param fileName File name. An extension is added to this name.
+	 * @param population Population to be saved.
+	 * @throws IOException
+	 */
 	void save(String fileName, List<GAWrapper> population) throws IOException {
 		fileName = fileName + ".dupa";
 		
