@@ -1,5 +1,6 @@
 package mlsim.console;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -105,6 +106,8 @@ class Commands {
 		addCommand(new Command("results", "Prints the results.", this::printResults, "results", "res", "r"));
 		addCommand(new Command("update", "Updates the population using the current selector.", this::updatePopulation, "update", "upd"));
 		addCommand(new Command("selector [bob|???] (selector parameters)*", "Sets the selector to the current one.", this::setSelector, "selector", "sel"));
+		addCommand(new Command("save file-name", "Saves the current population with this file-name.", this::save, "save"));
+		addCommand(new Command("load file-name", "Loads the population with this file-name.", this::load, "load"));
 		
 		addCommand(new Command("step", "Steps through the simulation.", this::step, "step", "s"));
 		addCommand(new Command("full", "XXXD.", this::full, "full"));
@@ -357,6 +360,35 @@ class Commands {
 		
 		if (!context.runMacro(macroName)) {
 			query.throwError("Macro " + macroName + " does not exist.");
+		}
+	}
+	
+	
+	private void save(Query query, ConsoleApp context) {
+		if (context.hasActiveSimulation()) {
+			query.throwError("Cannot save while an there is an active simulation.");
+		}
+		
+		String fileName = query.next();
+		
+		try {
+			context.save(fileName);
+		} catch (IOException e) {
+			query.throwError("There was an error saving this file: " + e.getMessage());
+		}
+	}
+	
+	private void load(Query query, ConsoleApp context) {
+		if (context.hasActiveSimulation()) {
+			query.throwError("Cannot load while an there is an active simulation.");
+		}
+		
+		String fileName = query.next();
+		
+		try {
+			context.load(fileName);
+		} catch (IOException e) {
+			query.throwError("There was an error loading this file: " + e.getMessage());
 		}
 	}
 	

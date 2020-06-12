@@ -44,7 +44,7 @@ public class GARandomFactory {
 	private static GeneticAlgorithm generateGeneticAlgorithm(int minSize, int maxSize, int preSize, int postSize) {
 		int ruleSize = preSize + postSize;
 		int randomizedSize = minSize + RAND.nextInt(maxSize - minSize + 1);
-		boolean[] randomArray = randomBinaryArray(randomizedSize);
+		boolean[] randomArray = randomBinaryArray(randomizedSize * ruleSize);
 		
 		GeneticAlgorithm ga = new GeneticAlgorithm(randomArray, ruleSize, preSize);
 		

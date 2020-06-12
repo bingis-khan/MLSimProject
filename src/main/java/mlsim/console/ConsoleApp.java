@@ -1,5 +1,6 @@
 package mlsim.console;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +36,9 @@ public class ConsoleApp {
 	
 	// Macros
 	private final Map<String, List<String>> macros = new HashMap<>();
+	
+	// Saving and loading
+	private final FileIO io = new FileIO();
 	
 	public static void main(String[] args) {
 		CommandParser parser = new CommandParser(Commands.initialize());
@@ -302,5 +306,15 @@ public class ConsoleApp {
 		}
 		
 		return true;
+	}
+	
+	/* SAVING & LOADING */
+	
+	public void save(String fileName) throws IOException {
+		io.save(fileName, currentPopulation);
+	}
+	
+	public void load(String fileName) throws IOException {
+		setPopulation(io.load(fileName));
 	}
 }

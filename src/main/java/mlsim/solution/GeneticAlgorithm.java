@@ -82,6 +82,21 @@ public class GeneticAlgorithm implements Crossover<GeneticAlgorithm>, Mutable<Ge
 	}
 	
 	/**
+	 * Presents the genetic algorithm as string.
+	 * 
+	 * @return Binary string.
+	 */
+	public String asString() {
+		StringBuilder code = new StringBuilder();
+		
+		for (Rule rule : rules) {
+			code.append(rule.asString());
+		}
+		
+		return code.toString();
+	}
+	
+	/**
 	 * Returns the amount of rules in this GA.
 	 * 
 	 * @return Numbers of rules ie. size.
@@ -219,5 +234,24 @@ class Rule {
 	 */
 	int size() {
 		return preCondition.length + postCondition.length;
+	}
+	
+	/**
+	 * String representation of a single rule.
+	 * 
+	 * @return Binary string.
+	 */
+	String asString() {
+		StringBuilder rule = new StringBuilder();
+		
+		for (boolean b : preCondition) {
+			rule.append(b ? '1' : '0');
+		}
+		
+		for (boolean b : postCondition) {
+			rule.append(b ? '1' : '0');
+		}
+		
+		return rule.toString();
 	}
 }

@@ -63,4 +63,7 @@ public class GAWrapper extends Wrapper<GAWrapper> {
 		return new Tuple<GAWrapper, GAWrapper>(new GAWrapper(tuple.first()), new GAWrapper(tuple.second()));
 	}
 	
+	public String asString() {
+		return ga.asString();
+	}
 }
