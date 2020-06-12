@@ -35,7 +35,7 @@ class CommandParser {
 		
 		// If command does not exist, raise error.
 		if (command == null) {
-			context.print("Could not find command with the name + '" + commandName + "'\n");
+			context.print("placeholder error\n");
 			hadError = true;
 			return;
 		}
@@ -73,7 +73,7 @@ class CommandParser {
 		StringBuilder sb = new StringBuilder();
 		
 		sb.append("ERROR: ").append(errorMessage).append('\n')
-			.append("Usage: ").append(com.usage()).append('\n');
+			.append(com.usage()).append('\n');
 		
 		return sb.toString();
 	}

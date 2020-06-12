@@ -38,6 +38,7 @@ public class FileIO {
 		return gas;
 	}
 	
+	
 	private boolean[] stringToBooleanArray(String s) {
 		boolean[] binary = new boolean[s.length()];
 		

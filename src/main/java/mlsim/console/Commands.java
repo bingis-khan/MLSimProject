@@ -107,23 +107,21 @@ class Commands {
 		addCommand(new Command("initialize population [minSize] [maxSize] [populationSize]", "Initializes a random population of size populationSize with GAs with size between minSize and maxSize.", this::initializePopulation, "initialize", "init", "i"));
 		addCommand(new Command("results", "Prints the results.", this::printResults, "results", "res", "r"));
 		addCommand(new Command("update", "Updates the population using the current selector.", this::updatePopulation, "update", "upd"));
-		addCommand(new Command("selector [bob|???] (selector parameters)*", "Sets the selector to the current one.", this::setSelector, "selector", "sel"));
+		addCommand(new Command("selector [bob] (selector parameters)*", "Sets the selector to the current one.", this::setSelector, "selector", "sel"));
 		addCommand(new Command("batch num-rounds sims-per-round","Batch training.", this::batch, "batch"));
 		addCommand(new Command("save file-name", "Saves the current population with this file-name.", this::save, "save"));
 		addCommand(new Command("load file-name", "Loads the population with this file-name.", this::load, "load"));
 		
 		addCommand(new Command("step", "Steps through the simulation.", this::step, "step", "s"));
-		addCommand(new Command("full", "XXXD.", this::full, "full"));
-		addCommand(new Command("end", "XXXD.", this::end, "end"));
+		addCommand(new Command("full", "Prints hole a simulation map.", this::full, "full"));
+		addCommand(new Command("end", "Ends a simulation and saving a simulation results.", this::end, "end"));
 		addCommand(new Command("finish", "Finish the simulation and save the results. ", this::finish, "finish", "fin"));
-		addCommand(new Command("adp", "XXXD.", this::addPerfect, "adp"));
+		addCommand(new Command("adp", "Dont use.", this::addPerfect, "adp"));
 		addCommand(new Command("gui", "Turn on the gui.", this::gui, "gui"));
 		addCommand(new Command("steps", "Prints the number of steps of this simulation.", this::steps, "steps"));
 		
-		addCommand(new Command("define macro macro_name ([string]+ #)+", "Defines a single macro. A macro is a combination of '#' delimited commands.", this::defineMacro, "define", "def"));
+		addCommand(new Command("define macro macro_name ([string]+ #)+", "Defines a single macro.", this::defineMacro, "define", "def"));
 		addCommand(new Command("macro macro_name", "Runs a macro with this name.", this::runMacro, "macro", "m"));
-		
-		addCommand(new Command("help command-name!", "Prints all available commands or command info if the command-name is given.", this::help, "help", "h"));
 	}
 	
 	/**
@@ -193,7 +191,7 @@ class Commands {
 		
 		if (populationSize < 1) query.throwError("Population size must be greater than 0.");
 		
-		context.setPopulation(GARandomFactory.generatePopulation(minSize, maxSize, populationSize, GAWrapper.PRE, GAWrapper.POST));
+		context.setPopulation(GARandomFactory.generatePopulation(minSize, maxSize, populationSize, 4, 2));
 	}
 	
 	private void setSimulationParameters(Query query, ConsoleApp context) {
@@ -517,47 +515,6 @@ class Commands {
 		}
 		
 		context.print(context.getSimulation().getSteps() + "\n");
-	}
-	
-	private void help(Query query, ConsoleApp context) {
-		if (!query.isAtEnd()) {
-			String commandName = query.next();
-			Command com = find(commandName);
-			
-			if (com == null) {
-				query.throwError("Command not found.");
-			}
-			
-			context.print(commandInfo(com));
-			
-			return;
-		}
-		
-		StringBuilder sb = new StringBuilder();
-		for (Command com : commands) {
-			for (String name : com.names()) {
-				sb.append(name).append(" ");
-			}
-			sb.append(": ").append(com.usage()).append('\n');
-		}
-		
-		context.print(sb.toString());
-		
-		return;
-	}
-	
-	private String commandInfo(Command com) {
-		StringBuilder sb = new StringBuilder();
-		
-		for (String name : com.names()) {
-			sb.append('|').append(name);
-		}
-		sb.append("|: ");
-		
-		sb.append(com.usage()).append('\n');
-		sb.append("	").append(com.description()).append('\n');
-		
-		return sb.toString();
 	}
 	
 	/* Debug */

@@ -4,17 +4,19 @@ import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
-import java.net.URI;
-import java.nio.file.Paths;
 
 import javax.imageio.ImageIO;
 
 import mlsim.simulation.Entity;
 import mlsim.simulation.Simulation;
 import mlsim.simulation.SimulationState;
-
+/**
+ * class has the environment of the simulation
+ * 
+ * @author bingis_khan 
+ *
+ */
 public class Gui {
 
 	private Display display;
@@ -27,15 +29,13 @@ public class Gui {
 	private BufferStrategy bs;
 	private Graphics g;
 
+	private int ticksPerSecond = 0;
+
+	// Temp
+	private int os = 0;
+
 	// Input
 	private KeyManager keyManager;
-	
-	private int ticksPerSecond;
-	
-	// Camera
-	int x = 0, y = 0, width, height;
-	
-	private boolean paused = false;
 	
 	private final BufferedImage agentImage, foodImage, bgImage;
 
@@ -45,18 +45,14 @@ public class Gui {
 		this.windowHeight = windowHeight;
 		this.title = title;
 		this.simulation = simulation;
-		
-		width = simulation.getWidth();
-		height = simulation.getHeight();
-		
 		keyManager = new KeyManager();
 		
 		try {
-			bgImage = ImageIO.read(new File("src/main/resources/t³o.jpg"));
-			agentImage = ImageIO.read(new File("src/main/resources/spurdo.jpg"));
-			foodImage = ImageIO.read(new File("src/main/resources/jab³ko.jpg"));
+			bgImage = ImageIO.read(getClass().getResource("t³o.jpg"));
+			agentImage = ImageIO.read(getClass().getResource("spinacz.jpg"));
+			foodImage = ImageIO.read(getClass().getResource("jablko.jpg"));
 		} catch(IOException e) {
-			throw new RuntimeException("Bruh, images can't load. Shieet." + e.getMessage());
+			throw new RuntimeException("Bruh, images can't load. Shieet.");
 		}
 	}
 
@@ -70,20 +66,12 @@ public class Gui {
 	}
 
 	private void tick() {
-		if (keyManager.keyJustPressed(KeyEvent.VK_SPACE)) {
-			paused = !paused;
-		}
+		if (keyManager.keyJustPressed(KeyEvent.VK_O))
+			os++;
 	}
-	
-	private void move(int moveX, int moveY) {
-		if (x + moveX >= 0 && y + moveY >= 0 &&
-				width + x + moveX < simulation.getWidth() &&
-				height + y + moveY < simulation.getHeight()) {
-			x += moveX;
-			y += moveX;
-		}
-	}
-
+/**
+ * Draw on the canvas.
+ */
 	public void render() {
 		bs = display.getCanvas().getBufferStrategy();
 		if (bs == null) {
@@ -92,8 +80,13 @@ public class Gui {
 		}
 		g = bs.getDrawGraphics();
 
-		
-		render(g, x, y, width, height, simulation.getSimulationState());
+		// Drawin'
+
+		// Current frame.
+		BufferedImage frame = render(0, 0, simulation.getWidth(), simulation.getHeight(),
+				simulation.getSimulationState());
+		// Draws it on the canvas.
+		g.drawImage(frame, 0, 0, windowWidth, windowHeight, null);
 
 		// End drawin'
 		bs.show();
@@ -101,31 +94,42 @@ public class Gui {
 	}
 	
 	/* PAT (poprawione) */
+	/**
+	 * 
+	 * Draw agents and food on the board 
+	 * 
+	 */
+	BufferedImage render(int x, int y, int width, int height, SimulationState s) {
+		BufferedImage background = new BufferedImage(bgImage.getWidth(), bgImage.getHeight(), BufferedImage.TYPE_INT_RGB);
+		Graphics g = background.getGraphics();
 
-	void render(Graphics g, int x, int y, int width, int height, SimulationState s) {
-		// Draw background
-		g.drawImage(bgImage, 0, 0, windowWidth, windowHeight, null);
-		
-		int cellWidth = windowWidth / width;
-		int cellHeight = windowHeight / height;
+		int cellWidth = bgImage.getWidth() / width;
+		int cellHeight = bgImage.getHeight() / height;
 
 		for (Entity agent : s.agents()) {
-			drawEntity(g, agent.getX() - x, agent.getY() - y, cellWidth, cellHeight, agentImage);
+			drawEntity(g, x - agent.getX(), y - agent.getY(), cellWidth, cellHeight, agentImage);
 		}
-		
 		for (Entity food : s.food()) {
-			drawEntity(g, food.getX() - x, food.getY() - y, cellWidth, cellHeight, foodImage);
+			drawEntity(g, x - food.getX(), y - food.getY(), cellWidth, cellHeight, foodImage);
 		}
+		g.dispose();
 
-		g.drawString(ticksPerSecond+"", windowWidth - 15, 10);
+		return background;
+
 	}
+	/**
+	 * Method of drawing agents on the board
+	 * @param g, x, y,,cellWidth, cellHeight, entityimage
+	 */
 
 	void drawEntity(Graphics g, int x, int y, int cellWidth, int cellHeight, BufferedImage entityimage) {
 		g.drawImage(entityimage, x * cellWidth, y * cellHeight, cellWidth, cellHeight, null);
 	}
 	
 	/* END PAT */
-
+	/**
+	 * main method which shows environment of simulation
+	 */
 	public void run() {
 		init();
 
@@ -154,7 +158,7 @@ public class Gui {
 				if (stepTicks == ticksPerStep) { // Step through the simulation every few ticks.
 					stepTicks = 0;
 
-					if (!paused) simulation.step();
+					simulation.step();
 				}
 			}
 			if (timer >= 1000000000) {

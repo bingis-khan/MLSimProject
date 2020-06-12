@@ -55,12 +55,11 @@ public class ConsoleApp {
 	 *  Method used to start the program which contains its main loop.
 	 */
 	void run() {
-		// Pre-made macro definitions.
+		// Temporary macro definitions.
 		parse("def adptest adp 1 # set p 30 7 5 # step");
 		parse("def basic set p 100 100 2.5 # i p 1 4 60 # sel bob 50 49 1");
 		parse("def sf step # full");
 		parse("def ru run simulation # update");
-		parse("def tt m basic # step # gui");
 		
 		while (!exit) {
 			print(">");
@@ -238,6 +237,45 @@ public class ConsoleApp {
 	 */
 	public void removeActiveSimulation() {
 		activeSimulation = null;
+	}
+	
+	/* TODO Tracking organisms */
+	
+	/**
+	 *  Add a solution to be tracked.
+	 *  
+	 *  @param sol Solution to be tracked (must exist in a list).
+	 *  
+	 */
+	public void track(Entity sol) {
+		
+	}
+	
+	/**
+	 * Returns the Set of tracked entities. Modifying the contents
+	 * is, as always, undefined behavior. Probably returns the copy of the set.
+	 * Probably... 
+	 * 
+	 * @return A (copy of?) Set with tracked entities.
+	 */
+	public Set<Entity> trackedEntities() {
+		return null;
+	}
+	
+	/**
+	 * Untrack a solution.
+	 * 
+	 * @param sol Solution to be untracked.
+	 */
+	public void untrack(Entity sol) {
+		
+	}
+	
+	/** 
+	 *  Untracks all solutions.
+	 */
+	public void untrackAll() {
+		
 	}
 	
 	/* Macros */

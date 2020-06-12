@@ -3,6 +3,10 @@ package mlsim.gui;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+/**
+ * Save information what keys the user press
+ *
+ */
 public class KeyManager implements KeyListener {
 
 	private boolean[] keys, justPressed, cantPress;
@@ -12,7 +16,9 @@ public class KeyManager implements KeyListener {
 		justPressed = new boolean[keys.length];
 		cantPress = new boolean[keys.length];
 	}
-	
+	/**
+	 * give a value of key which the user presses
+	 */
 	public void tick() {
 		for(int i = 0; i < keys.length; i++) {
 			if(cantPress[i] && !keys[i]) {
@@ -25,7 +31,9 @@ public class KeyManager implements KeyListener {
 				justPressed[i] = true;
 		}
 	}
-	
+	/**
+	 * @return a string of key that the user pressed
+	 */
 	public boolean keyJustPressed(int key) {
 		return justPressed[key];
 	}
