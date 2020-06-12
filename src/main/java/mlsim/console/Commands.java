@@ -114,6 +114,7 @@ class Commands {
 		addCommand(new Command("step", "Steps through the simulation.", this::step, "step", "s"));
 		addCommand(new Command("full", "XXXD.", this::full, "full"));
 		addCommand(new Command("end", "XXXD.", this::end, "end"));
+		addCommand(new Command("finish", "Finish the simulation and save the results. ", this::finish, "finish", "fin"));
 		addCommand(new Command("adp", "XXXD.", this::addPerfect, "adp"));
 		
 		addCommand(new Command("define macro macro_name ([string]+ #)+", "Defines a single macro.", this::defineMacro, "define", "def"));
@@ -282,6 +283,10 @@ class Commands {
 	}
 	
 	private void full(Query query, ConsoleApp context) {
+		if (!context.hasActiveSimulation()) {
+			query.throwError("No active simulation.");
+		}
+		
 		StringBuilder builder = new StringBuilder();
 		Simulation sim = context.getSimulation();
 		final int width = sim.getWidth();
@@ -433,6 +438,7 @@ class Commands {
 	}
 	
 	private List<Integer> round(ConsoleApp context, final int simulationsPerRound) {
+		// Oh no, it all looks retarded.
 		List<Integer> fitness = null;
 		for (int i = 0; i < simulationsPerRound; i++) {
 			List<Integer> currentFitness = context.newSimulation().finish().fitness();
@@ -476,6 +482,16 @@ class Commands {
 			assert divided > 0;
 			list.set(i, divided);
 		}
+	}
+	
+	private void finish(Query query, ConsoleApp context) {
+		if (!context.hasActiveSimulation()) {
+			query.throwError("No active simulation to 'finish'.");
+		}
+		
+		Results<GAWrapper> results = context.getSimulation().finish();
+		context.addResults(results);
+		context.removeActiveSimulation();
 	}
 	
 	/* Debug */

@@ -12,6 +12,8 @@ import mlsim.util.Tuple;
 public class GAWrapper extends Wrapper<GAWrapper> {
 	public static final int PRE = 4, POST = 2;
 	
+	private static final FlagSetter setter = FlagSetter.defaultSetter();
+	
 	private final GeneticAlgorithm ga;
 	
 	public GAWrapper(GeneticAlgorithm ga) {
@@ -22,20 +24,9 @@ public class GAWrapper extends Wrapper<GAWrapper> {
 	
 	@Override
 	public Move evaluate(Entity self, SimulationState s) {
-		List<? extends Entity> food = s.food();
+		boolean[] flags = setter.convert(self, s);
 		
-		
-		Entity closestFood = smallestDistance(self, food);
-		Move moveFood = moveBalanced(self, closestFood);
-		
-		boolean[] flags = new boolean[PRE];
-		
-		switch (moveFood) {
-			case NORTH: flags[0] = true; break;
-			case SOUTH: flags[1] = true; break;
-			case WEST:  flags[2] = true; break;
-			case EAST:  flags[3] = true; break;
-		}
+		assert flags.length == PRE : "Converted flags must be equal to the current precondition.";
 		
 		int intMove = ga.evaluate(flags);
 		return toMove(intMove);

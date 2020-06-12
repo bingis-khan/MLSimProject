@@ -21,7 +21,7 @@ public abstract class Wrapper<T extends Wrapper<T>> implements Mutable<T>, Cross
 	 * @param moveTo The entity we're moving towards.
 	 * @return A move that should decrease the distance between the two.
 	 */
-	protected Move moveBalanced(Entity main, Entity moveTo) {
+	protected static Move moveBalanced(Entity main, Entity moveTo) {
 		int xDist = xDistance(main, moveTo),
 			yDist = yDistance(main, moveTo);
 		
@@ -36,7 +36,7 @@ public abstract class Wrapper<T extends Wrapper<T>> implements Mutable<T>, Cross
 	 *  Returns the move which main should take to get closer
 	 *  to moveTo on x axis.
 	 */
-	private Move moveTowardsX(Entity main, Entity moveTo) {
+	private static Move moveTowardsX(Entity main, Entity moveTo) {
 		return main.getX() > moveTo.getX() ? Move.WEST : Move.EAST;
 	}
 	
@@ -44,7 +44,7 @@ public abstract class Wrapper<T extends Wrapper<T>> implements Mutable<T>, Cross
 	 *  Returns the move which main should take to get closer
 	 *  to moveTo on y axis.
 	 */
-	private Move moveTowardsY(Entity main, Entity moveTo) {
+	private static Move moveTowardsY(Entity main, Entity moveTo) {
 		return main.getY() > moveTo.getY() ? Move.NORTH : Move.SOUTH;
 	}
 	
@@ -58,7 +58,7 @@ public abstract class Wrapper<T extends Wrapper<T>> implements Mutable<T>, Cross
 	 * @param entities List of entities that will have their distance to entity checked.
 	 * @return Closest entity in taxicab distance to main or null if none found.
 	 */
-	protected Entity smallestDistance(Entity main, List<? extends Entity> entities) {
+	protected static Entity smallestDistance(Entity main, List<? extends Entity> entities) {
 		int distance = Integer.MAX_VALUE;
 		Entity closest = null;
 		
@@ -80,7 +80,7 @@ public abstract class Wrapper<T extends Wrapper<T>> implements Mutable<T>, Cross
 	 * @param e2 Second entity.
 	 * @return Taxicab distance.
 	 */
-	protected int distanceOf(Entity e1, Entity e2) {
+	protected static int distanceOf(Entity e1, Entity e2) {
 		return xDistance(e1, e2) + yDistance(e1, e2); 
 	}
 	
@@ -92,7 +92,7 @@ public abstract class Wrapper<T extends Wrapper<T>> implements Mutable<T>, Cross
 	 *  @param e2 Second entity.
 	 *  @return Y coordinate difference.
 	 */
-	protected int yDistance(Entity e1, Entity e2) {
+	protected static int yDistance(Entity e1, Entity e2) {
 		return Math.abs(e1.getY() - e2.getY());
 	}
 	
@@ -104,7 +104,7 @@ public abstract class Wrapper<T extends Wrapper<T>> implements Mutable<T>, Cross
 	 *  @param e2 Second entity.
 	 *  @return X coordinate difference.
 	 */
-	protected int xDistance(Entity e1, Entity e2) {
+	protected static int xDistance(Entity e1, Entity e2) {
 		return Math.abs(e1.getX() - e2.getX());
 	}
 }
