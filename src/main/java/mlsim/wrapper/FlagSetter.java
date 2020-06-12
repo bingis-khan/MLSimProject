@@ -7,7 +7,13 @@ import mlsim.simulation.Entity;
 import mlsim.simulation.Move;
 import mlsim.simulation.SimulationState;
 
-
+/**
+ * Class in which change type of variables from SimulationState 
+ * to flags in GeneticAlgoritm
+ * 
+ * @author bingis_khan
+ *
+ */
 class FlagSetter {
 	private final List<Part> parts = new ArrayList<>();
 	
