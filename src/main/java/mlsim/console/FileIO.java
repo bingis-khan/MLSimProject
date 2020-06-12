@@ -11,7 +11,9 @@ import java.util.List;
 
 import mlsim.solution.GeneticAlgorithm;
 import mlsim.wrapper.GAWrapper;
-
+/**
+* class which Save and loading populations
+*/
 public class FileIO {
 	// Temporary constants.
 	private static final int PRE = GAWrapper.PRE, POST = GAWrapper.POST;
